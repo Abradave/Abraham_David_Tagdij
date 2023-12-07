@@ -13,12 +13,41 @@ namespace Tagdij
         static List<Tagok> tag = new List<Tagok>();
         static MySqlConnection con = null;
         static MySqlCommand cmd = null;
-        static void Main(string[] args)
+        static async void Main(string[] args)
         {
-            beolvasas();
-            ujTag(1014,"Csiga Kutya", 1988, 1071, "HU");
-            kiir();
-            deleteTag(1014);
+ 
+            Console.WriteLine("Újabb tag felvétele: I \tTörlés: T\nAdja meg mit szeretne: ");
+            string valasz = Console.ReadLine();
+            if (valasz == "I" || valasz == "i" || valasz == "igen" || valasz == "IGEN" || valasz == "Igen")
+            {
+                Console.WriteLine("Adja meg az id-t: ");
+                int id = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Adja meg a nevét: ");
+                string name = Console.ReadLine();
+                Console.WriteLine("Adja meg a születési évét: ");
+                int birthy = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Adja meg az irányító számát: ");
+                int postcode = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Adja meg a nemzetiségét: ");
+                string nationality = Console.ReadLine();
+
+                beolvasas();
+                ujTag(id, name, birthy, postcode, nationality);                
+                kiir();
+            }
+            else if (valasz == "T" || valasz == "t" || valasz == "törlés" || valasz == "TÖRLÉS" || valasz == "Törlés") {
+                Console.WriteLine("Adja meg az azonosító számot amit törölni szeretne: ");
+                int id = Convert.ToInt32(Console.ReadLine());
+                beolvasas();
+                deleteTag(id);
+                kiir();
+            }
+            else
+            {
+                beolvasas();
+                kiir();
+            }
+
             Console.ReadKey();
         }
 
@@ -64,6 +93,8 @@ namespace Tagdij
 
         private static void ujTag(int id, string name, int birthy, int postcode, string nationality)
         {
+            Console.WriteLine(name);
+            Console.ReadKey();
             Tagok ugyfel = new Tagok(id, name, birthy, postcode, nationality);
             cmd.CommandText = "INSERT INTO `ugyfel`(`azon`, `nev`, `szulev`, `irszam`, `orsz`) VALUES (@azon,@nev,@szulev,@irszam,@orsz)";
             cmd.Parameters.Clear();
